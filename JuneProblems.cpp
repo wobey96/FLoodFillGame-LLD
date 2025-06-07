@@ -2,7 +2,12 @@
 //
 
 #include "JuneProblems.h"
+#include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+
 
 using namespace std;
 
@@ -113,6 +118,7 @@ protected:
 
 int main()
 {
+	/*
 	cout << "Hello CMake." << endl;
 	Player p1("Wallace");
 	p1.setSymbol(); 
@@ -121,6 +127,32 @@ int main()
 	Player p2("Quintin"); 
 	p2.setSymbol(); 
 	p2.displaySymbol(); 
+	*/
+	/*
+	cout << "What food do you want to eat:\n"; 
+	string food; 
+	cin >> food; 
 
+	ofstream file("Foods.txt"); 
+	file << food; 
+	file.close(); 
+	*/
+
+	vector<string> familyList; 
+	ifstream file("Family_List.txt");
+
+	string person; 
+
+	while (file >> person)
+	{
+		familyList.push_back(person); 
+	}
+	cout << " From file \n"; 
+	for (auto& i : familyList)
+	{
+		cout << i << "\n"; 
+	}
+ 
+	file.close(); 
 	return 0;
 }
