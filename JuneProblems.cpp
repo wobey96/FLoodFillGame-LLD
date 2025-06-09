@@ -62,7 +62,12 @@ class GameBoard
 {
 public: 
 	GameBoard() = default;
-	vector<vector<char>> publicBoard{ {'*','*','*','*'}, {'*','*','*','*'}, {'*','*','*','*'}, {'*','*','*','*'} };
+
+	vector<vector<char>> publicBoard{ {'*','*','*','*'},
+									  {'*','*','*','*'},
+									  {'*','*','*','*'},
+									  {'*','*','*','*'} };
+
 	vector<vector<int>> dir = { {0,1}, {1,0}, {0,-1}, {-1,0} }; 
 
 	bool valid(int row, int col, Player& p)
@@ -72,11 +77,11 @@ public:
 
 	void displayBoard()
 	{
-		for (auto& row : publicBoard)
+		for (int i = 0; i < publicBoard.size(); i++)
 		{
-			for (auto& col : row)
+			for (int j = 0; j < publicBoard[0].size(); j++)
 			{
-				cout << col << " "; 
+				cout << publicBoard[i][j] << " "; 
 			}
 			cout << endl; 
 		}
@@ -111,7 +116,7 @@ public:
 	void floodFillAlgo(int row, int col, Player& p)
 	{
 		// breadth first search? 
-		vector<vector<bool>> visited(row, vector<bool>(col, false)); 
+		vector<vector<bool>> visited(publicBoard.size(), vector<bool>(publicBoard[0].size(), false));
 		visited[row][col] = true; 
 		queue<vector<int>> que; 
 
@@ -131,8 +136,6 @@ public:
 				return; 
 			}
 
-
-
 			// visit neighbors
 			for (auto& i : dir)
 			{
@@ -150,7 +153,10 @@ public:
 	}
 
 private:
-	vector<vector<char>> privateBoard { {'x','o','x','o'}, {'x','x','o','o'}, {'o','x','o','x'}, {'o','o','x','x'} };
+	vector<vector<char>> privateBoard { {'x','o','x','o'},
+										{'x','x','o','o'},
+										{'o','x','o','x'},
+										{'o','o','x','x'} };
 
 };
 
@@ -163,8 +169,6 @@ public:
 	{
 
 	}
-
-	
 
 	void inputMove(Player& p, GameBoard& gb)
 	{
@@ -230,7 +234,6 @@ void displayBoard(vector<vector<char>>& publicBoard)
 
 int main()
 {
-	
 	GameManager gm; 
 	GameBoard gb; 
 
@@ -245,20 +248,28 @@ int main()
 
 	int keepGoing = 1; 
 
-	while (keepGoing)
+	gb.update(0, 3, p2); 
+	
+	
+	/*
+	cout << "rows in board: "  << gb.publicBoard.size() << " col in board: " << gb.publicBoard[0].size() << endl; 
+
+	for (int i = 0; i < gb.publicBoard.size(); i++)
 	{
-		gm.inputMove(p1, gb);
-
-		gm.inputMove(p2, gb);
-
+		for (int j = 0; j < gb.publicBoard[0].size(); j++)
+		{
+			cout << gb.publicBoard[i][j] << " "; 
+		}
 		cout << endl; 
-
-		cout << " Keep going? Enter 1 for yes and 0 for no" << endl; 
-
-		cin >> keepGoing; 
 	}
 
-	 
+	cout << "again " << endl; 
+
+	gb.displayBoard(); 
+
+
+	cout << "valid result " << gb.valid(0, 0, p1) << endl; ;
+	*/
 	
 
 	/*
@@ -289,6 +300,11 @@ int main()
 		cin >> keepGoing; 
 	}
 	*/ 
+	int initCol = 4; 
+	int initRow = 4;
+	vector<vector<bool>> mylist(initRow, vector<bool>(initCol, false));
+
+	mylist[initRow - 1][initCol - 1] = true; 
 	
 	return 0;
 }
