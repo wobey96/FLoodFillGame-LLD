@@ -1,1 +1,1 @@
-Low Level Design Practice
+Low-level design practice with my little brother. Basically made a game that incorporated the OOP, BSF algorithm, and appropriate data structures. You choose a location on the map, and the flood fill algorithm is performed. You gain points based on flood fill algorithm until you hit your score limit. 
