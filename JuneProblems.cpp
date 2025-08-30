@@ -58,6 +58,8 @@ protected:
 	
 };
 
+
+
 class GameBoard
 {
 public: 
@@ -68,11 +70,11 @@ public:
 									  {'*','*','*','*'},
 									  {'*','*','*','*'} };
 
-	vector<vector<int>> dir = { {0,1}, {1,0}, {0,-1}, {-1,0} }; 
+	vector<vector<int>> dir = { {0,1}, {0,-1}, {1,0}, {-1,0} }; 
 
 	bool valid(int row, int col, Player& p)
 	{
-		return 0 <= row && row < publicBoard.size() && 0 <= col && col < publicBoard[0].size() && privateBoard[row][col] == p.makeMove(); 
+		return 0 <= row && row < publicBoard.size() && 0 <= col && col < publicBoard[0].size() && privateBoard[row][col] == p.makeMove() && publicBoard[row][col] == '*';
 	}
 
 	void displayBoard()
@@ -130,6 +132,10 @@ public:
 			int currRow = curr[0]; 
 			int currCol = curr[1]; 
 
+			publicBoard[currRow][currCol] = p.makeMove(); 
+			p.setScore(1); 
+
+			// only stop if all positions have been visited 
 			if (row == publicBoard.size() - 1 && col == publicBoard[0].size() - 1)
 			{
 				cout << " Done with flood fill \n"; 
@@ -139,14 +145,13 @@ public:
 			// visit neighbors
 			for (auto& i : dir)
 			{
-				int nextRow = row + i[0]; 
-				int nextCol = row + i[1]; 
+				int nextRow = currRow + i[0]; 
+				int nextCol = currCol + i[1]; 
 
 				if (valid(nextRow, nextCol, p) && !visited[nextRow][nextCol])
 				{
 					visited[nextRow][nextCol] = true;
 					que.push({ nextRow, nextCol });
-					publicBoard[nextRow][nextCol] = p.makeMove(); 
 				}
 			}
 		}
@@ -167,17 +172,19 @@ public:
 
 	void GameLoop()
 	{
-
+		return;
 	}
 
 	void inputMove(Player& p, GameBoard& gb)
 	{
 		cout << endl; 
 
-		p.displaySymbol(); 
+		std::cout << "Player:\n ";
+		p.displaySymbol();
+
 
 		cout << "choose position on game board" << endl; 
-		int row = 0; 
+		int row = 0;
 		int col = 0;
 		cout << " Choose row position" << endl; 
 		cin >> row; 
@@ -187,25 +194,7 @@ public:
 
 		// update game board 
 		gb.update(row, col, p); 
-
-		// update score
-		//p.setScore(1); 
-
-		// check if player symbol is same as privateBoard symbol
-		// if so 
-		
-
-
-		// 
-
-
 	}
-
-protected:
-	
-
- 
-
 };
 
 
@@ -238,68 +227,71 @@ int main()
 	GameBoard gb; 
 
 	cout << "Hello CMake." << endl;
+
+	cout << " Player 1 enter info \n"; 
 	Player p1("Wallace");
 	p1.setSymbol(); 
 	p1.displaySymbol(); 
 
+	cout << endl; 
+	cout << "Player two enter info \n"; 
 	Player p2("Quintin"); 
 	p2.setSymbol(); 
 	p2.displaySymbol(); 
 
+	cout << endl; 
 	int keepGoing = 1; 
 
-	gb.update(0, 3, p2); 
-	
-	
-	/*
-	cout << "rows in board: "  << gb.publicBoard.size() << " col in board: " << gb.publicBoard[0].size() << endl; 
+	cout << "Loop to keep playing: \n"; 
 
-	for (int i = 0; i < gb.publicBoard.size(); i++)
-	{
-		for (int j = 0; j < gb.publicBoard[0].size(); j++)
-		{
-			cout << gb.publicBoard[i][j] << " "; 
-		}
-		cout << endl; 
-	}
-
-	cout << "again " << endl; 
-
-	gb.displayBoard(); 
-
-
-	cout << "valid result " << gb.valid(0, 0, p1) << endl; ;
-	*/
-	
-
-	/*
-	vector<vector<char>> privateBoard{ {'*','*','*','*'}, {'*','*','*','*'}, {'*','*','*','*'}, {'*','*','*','*'} };
-
-	int keepGoing = 1; 
 	while (keepGoing)
 	{
-		
-		int row;
-		int col;
-		char symbol;
+		int myRow;
+		int myCol;
 
-		cout << " enter row val \n";
-		cin >> row;
+		if (keepGoing % 2 == 0)
+		{
+			cout << "It's your turn: " << endl; 
+			p1.displaySymbol(); 
+			cout << endl; 
+		}
+		else
+		{
+			cout << "It's your turn: " << endl;
+			p2.displaySymbol();
+			cout << endl; 
+		}
 
-		cout << " enter col val \n";
-		cin >> col;
+		cout << "Enter row \n"; 
+		cin >> myRow; 
 
-		cout << " enter symbol val \n";
-		cin >> symbol;
+		cout << "Enter col \n"; 
+		cin >> myCol;
 
-		privateBoard[row][col] = symbol;
+		if (keepGoing % 2 == 0)
+		{
+			gb.update(myRow, myCol, p1);
+		}
+		else
+		{
+			gb.update(myRow, myCol, p2); 
+		}
 
-		displayBoard(privateBoard);
+		cout << " Keep going? Enter 1 for yes and 0 for no" << endl; 
+		int answer = 0;
 
-		cout << "keep going? enter 1 for yes 0 for no \n"; 
-		cin >> keepGoing; 
+		cin >> answer; 
+
+		if (answer)
+		{
+			keepGoing++; 
+		}
+		else
+		{
+			break; 
+		}
 	}
-	*/ 
+	
 	int initCol = 4; 
 	int initRow = 4;
 	vector<vector<bool>> mylist(initRow, vector<bool>(initCol, false));
